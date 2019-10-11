@@ -47,6 +47,7 @@ final class ProcessingSequenceBarrier implements SequenceBarrier
         }
     }
 
+    //消费 找到目前可消费到的位置
     @Override
     public long waitFor(final long sequence)
         throws AlertException, InterruptedException, TimeoutException

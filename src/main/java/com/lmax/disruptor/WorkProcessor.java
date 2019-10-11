@@ -102,6 +102,7 @@ public final class WorkProcessor<T>
      *
      * @throws IllegalStateException if this processor is already running
      */
+    //多线程同时消费队列
     @Override
     public void run()
     {

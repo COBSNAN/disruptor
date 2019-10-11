@@ -125,13 +125,17 @@ public final class SingleProducerSequencer extends SingleProducerSequencerFields
 
         long nextSequence = nextValue + n;
         long wrapPoint = nextSequence - bufferSize;
+        //cachedValue 记录最慢消费者消费的位置
         long cachedGatingSequence = this.cachedValue;
-
+        //这段需要理解一下 wrapPoint > cachedGatingSequence 这个的含义是添加数据少一圈过后，仍比最慢消费者消费的位置大，那么需要检查 消费目前最慢消费的位置在哪
+        //否则 停顿
         if (wrapPoint > cachedGatingSequence || cachedGatingSequence > nextValue)
         {
+            //这里没有实时更新写入值，因为是单线程
             cursor.setVolatile(nextValue);  // StoreLoad fence
 
             long minSequence;
+            //这个做暂停，当写入超过队列的时候，空等待
             while (wrapPoint > (minSequence = Util.getMinimumSequence(gatingSequences, nextValue)))
             {
                 LockSupport.parkNanos(1L); // TODO: Use waitStrategy to spin?

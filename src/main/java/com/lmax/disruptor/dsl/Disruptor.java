@@ -56,6 +56,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @param <T> the type of event used.
  */
+
+/**
+ * - Disruptor
+ * - RingBuffer -> AbstractSequencer cursor 记录当个添加位置  gatingSequences 记录消费者消费位置
+ * - SingleProducerSequencer
+ * - BatchEventProcessor 消费类
+ * - Sequence 记录读写位置的类
+ * @param <T>
+ */
 public class Disruptor<T>
 {
     private final RingBuffer<T> ringBuffer;
@@ -547,6 +556,8 @@ public class Disruptor<T>
         {
             final EventHandler<? super T> eventHandler = eventHandlers[i];
 
+
+            //消费执行processor 里面的run 方法
             final BatchEventProcessor<T> batchEventProcessor =
                 new BatchEventProcessor<>(ringBuffer, barrier, eventHandler);
 
@@ -568,6 +579,7 @@ public class Disruptor<T>
     {
         if (processorSequences.length > 0)
         {
+            //添加消费Processor 个消费的记录点
             ringBuffer.addGatingSequences(processorSequences);
             for (final Sequence barrierSequence : barrierSequences)
             {

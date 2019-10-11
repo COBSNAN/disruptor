@@ -90,6 +90,7 @@ abstract class RingBufferFields<E> extends RingBufferPad
     @SuppressWarnings("unchecked")
     protected final E elementAt(long sequence)
     {
+        System.out.println(sequence + ":" + (REF_ARRAY_BASE + ((sequence & indexMask) << REF_ELEMENT_SHIFT)));
         return (E) UNSAFE.getObject(entries, REF_ARRAY_BASE + ((sequence & indexMask) << REF_ELEMENT_SHIFT));
     }
 }

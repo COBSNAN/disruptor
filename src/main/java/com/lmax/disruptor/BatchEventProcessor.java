@@ -147,6 +147,7 @@ public final class BatchEventProcessor<T>
         }
     }
 
+    //消费数据程序
     private void processEvents()
     {
         T event = null;
@@ -164,11 +165,12 @@ public final class BatchEventProcessor<T>
 
                 while (nextSequence <= availableSequence)
                 {
+                    //RingBuffer 中获取nextSequence 的值
                     event = dataProvider.get(nextSequence);
                     eventHandler.onEvent(event, nextSequence, nextSequence == availableSequence);
                     nextSequence++;
                 }
-
+                //主要消费完一批后才更新的消费位点，起始是-1
                 sequence.set(availableSequence);
             }
             catch (final TimeoutException e)

@@ -190,6 +190,7 @@ public class DisruptorTest
         rb.publish(rb.next());
         rb.publish(rb.next());
         rb.publish(rb.next());
+        rb.publish(rb.next());
 
         disruptor.handleEventsWith(b1, b2, b3);
 
@@ -212,6 +213,7 @@ public class DisruptorTest
         rb.publish(rb.next());
         rb.publish(rb.next());
         rb.publish(rb.next());
+//        rb.publish(rb.next());
 
         disruptor.handleEventsWith(b1, b2, b3);
 
